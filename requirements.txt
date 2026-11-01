@@ -1,0 +1,9 @@
+streamlit
+moviepy
+numpy
+opencv-python
+requests
+Pillow
+playwright
+python-dotenv
+edge-tts

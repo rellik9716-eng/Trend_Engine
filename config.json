@@ -1,0 +1,41 @@
+{
+  "agency_name": "Havenwright",
+  "product": "AI-Powered B2B SaaS Outreach System",
+  "target_niche": "B2B SaaS",
+  "pain_points": ["High CAC", "Manual Outreach"],
+  "search_keywords": ["AI sales automation", "B2B SaaS marketing"],
+  "max_results": 10,
+  "platforms": {
+    "youtube": {
+      "enabled": true,
+      "api_key": "AIzaSyCGNa8AMlEQ8X56-fNro5BZIZjsZ3rq72k"
+    },
+    "google_custom_search": {
+      "enabled": true,
+	  "serper_key": "72ed65f3fc1b0cbe8db04c52c2b53d7a2fed8f0c",
+      "api_key": "",
+      "cx": "f42a4397a7ed144a3"
+    },
+    "google_trends": {
+      "enabled": true,
+      "api_key": ""
+    },
+    "tiktok": {
+      "enabled": true,
+      "api_key": ""
+    },
+    "instagram": {
+      "enabled": false,
+      "api_key": ""
+    },
+    "twitter": {
+      "enabled": false,
+      "api_key": ""
+    },
+    "reddit": {
+      "enabled": false,
+      "api_key": "",
+      "client_secret": ""
+    }
+  }
+}

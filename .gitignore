@@ -1,0 +1,27 @@
+# Python
+__pycache__/
+*.py[cod]
+.venv/
+venv/
+
+# Outputs (rendered videos, raw trends, reports)
+output/
+data/
+EMPIRE_STATUS.txt
+ai_images/
+
+# Secrets
+.env
+APIKeys.env
+
+# Logs & noise
+*.log
+*.mp4
+*.mp3
+*.jpg
+*.jpeg
+*.zip
+.agents/
+.claude/
+.streamlit/
+.DS_Store
