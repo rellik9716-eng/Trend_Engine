@@ -4,6 +4,49 @@ import json
 import os
 import sys
 
+import streamlit as st
+
+# --- HIGH-TECH "2049" AESTHETIC INJECTION ---
+st.set_page_config(
+    page_title="THE EMPIRE ENGINE",
+    page_icon="🛰️",
+    layout="wide",
+    initial_sidebar_state="expanded"
+)
+
+st.markdown("""
+<style>
+    /* The "Void" Background */
+    .stApp { background-color: #050505; color: #e0e0e0; }
+    
+    /* High-Tech Font */
+    .stApp { font-family: 'Consolas', 'Courier New', monospace; }
+    
+    /* Glowing Cyan Headers */
+    h1, h2, h3 { color: #00ffff; text-shadow: 0 0 10px rgba(0, 255, 255, 0.5); }
+    
+    /* The "Control Center" Buttons */
+    .stButton > button { 
+        background-color: #001111; 
+        color: #00ffff; 
+        border: 1px solid #00ffff;
+        box-shadow: 0 0 15px rgba(0, 255, 255, 0.2);
+        width: 100%;
+    }
+    .stButton > button:hover { 
+        background-color: #00ffff; 
+        color: #000000; 
+        box-shadow: 0 0 25px rgba(0, 255, 255, 0.6);
+    }
+    
+    /* The "Data" Containers */
+    div[data-testid="stExpander"] { 
+        background-color: #0a0a0a; 
+        border: 1px solid #113333; 
+    }
+</style>
+""", unsafe_allow_html=True)
+
 st.set_page_config(page_title="EMPIRE ENGINE", page_icon="🚀", layout="wide")
 st.title("🚀 EMPIRE ENGINE: Full Automation Suite")
 st.markdown("---")
