@@ -94,8 +94,8 @@ with col1:
 
 with col2:
     st.subheader("📈 Niche Pulse")
-    if os.path.exists("EMPIRE_STATUS.txt"):
-        with open("EMPIRE_STATUS.txt", encoding="utf-8") as f:
+with open("EMPIRE_STATUS.txt", encoding="utf-8") as f:
+    st.code(f.read(), language="markdown")
     st.code(f.read(), language="markdown")
     else:
         st.info("Run the engine to generate status.")
