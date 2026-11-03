@@ -2,9 +2,20 @@
   "agency_name": "Havenwright",
   "product": "AI-Powered B2B SaaS Outreach System",
   "target_niche": "B2B SaaS",
-  "pain_points": ["High CAC", "Manual Outreach"],
-  "search_keywords": ["AI sales automation", "B2B SaaS marketing"],
+  "pain_points": ["High CAC", "Manual Outreach", "Slow Sales Cycles"],
+  "search_keywords": [
+    "AI sales automation",
+    "B2B SaaS outreach",
+    "outbound lead generation",
+    "cold email personalization",
+    "sales tech trends 2026",
+    "AI prospecting tools"
+  ],
   "max_results": 10,
+  "scoring": {
+    "threshold": 6,
+    "power_words": ["AI", "AUTOMATION", "VIRAL", "TREND", "BREAKTHROUGH", "ROAS", "CAC"]
+  },
   "platforms": {
     "youtube": {
       "enabled": true,
@@ -12,7 +23,7 @@
     },
     "google_custom_search": {
       "enabled": true,
-	  "serper_key": "72ed65f3fc1b0cbe8db04c52c2b53d7a2fed8f0c",
+      "serper_key": "72ed65f3fc1b0cbe8db04c52c2b53d7a2fed8f0c",
       "api_key": "",
       "cx": "f42a4397a7ed144a3"
     },
@@ -23,19 +34,6 @@
     "tiktok": {
       "enabled": true,
       "api_key": ""
-    },
-    "instagram": {
-      "enabled": false,
-      "api_key": ""
-    },
-    "twitter": {
-      "enabled": false,
-      "api_key": ""
-    },
-    "reddit": {
-      "enabled": false,
-      "api_key": "",
-      "client_secret": ""
     }
   }
 }

@@ -1,14 +1,13 @@
-"""2049 agency video factory — VERTICAL (1080x1920).
-Stack: kinetic grid (bottom) -> hologram AI image (mid) -> HUD + decode text (top) -> glitch (final).
-Usage: python video_factory.py image_path [headline] [out.mp4]
-       or: from video_factory import build
-"""
+"""2049 agency video factory — VERTICAL (1080x1920)."""
 import os
 import string
 import sys
+import time
+import json
 from random import Random
 
 import numpy as np
+import requests
 from PIL import Image, ImageFilter
 from moviepy import (
     CompositeVideoClip,
@@ -20,6 +19,59 @@ from moviepy import (
 
 from glitch import apply_glitch
 from kinetic_bg import make_kinetic_bg
+
+# Vertical 9:16 — TikTok/Reels/Shorts
+W, H = 1080, 1920
+FONT = "consola"
+OUTPUT_DIR = os.path.join(os.path.dirname(os.path.abspath(__file__)), "output", "final_ads")
+
+def hyperreal_prompt(inject_text):
+    """Wraps a simple idea in a 'Higsfield' grade cinematic prompt."""
+    # The "2049" Aesthetic Injection
+    style_suffix = (
+        "hyperrealistic, 8k resolution, shot on ARRI ALEXA 65, 85mm lens, "
+        "cinematic lighting, volumetric fog, neon cyan and deep purple accents, "
+        "sharp focus, highly detailed textures, futuristic B2B SaaS aesthetic, "
+        "minimalist, generational tech, unreal engine 5 render, award-winning photography"
+    )
+    return f"{inject_text}, {style_suffix}"
+
+def generate_free_image(prompt, save_path="ai_images/auto_render.png"):
+    """Generates a 'Higsfield' grade vertical image using the free Pollinations Flux API with Retry Logic."""
+    os.makedirs(os.path.dirname(save_path), exist_ok=True)
+    
+    # 1. Inject the "Cinematic" direction
+    full_prompt = hyperreal_prompt(prompt)
+    
+    # 2. The "Cracked" Free URL (Forcing Flux + Enhancement)
+    url = (
+        f"https://image.pollinations.ai/prompt/{full_prompt}"
+        f"?width=1080&height=1920&model=flux&nologo=true&enhance=true&safe=true"
+    )
+    
+    print(f"🎬 [HYPERREAL-STACK] Rendering 8k Cinematic Asset...")
+    
+    # 3. The "Retry Engine" (Handles 503 errors)
+    for attempt in range(1, 4):
+        try:
+            print(f"   -> Attempt {attempt}/3...")
+            response = requests.get(url, timeout=120)
+            
+            if response.status_code == 200:
+                with open(save_path, "wb") as f:
+                    f.write(response.content)
+                print("   ✅ HYPERREAL ASSET READY.")
+                return save_path
+            elif response.status_code == 503:
+                print("   ⚠️ Server busy (503). Waiting 5s and retrying...")
+                time.sleep(5)
+            else:
+                raise Exception(f"Hyperreal render failed: {response.status_code}")
+        except requests.exceptions.RequestException as e:
+            print(f"   ⚠️ Network glitch: {e}. Retrying...")
+            time.sleep(5)
+            
+    raise Exception("Failed to render after 3 attempts. The free 'Cloud' is likely crowded.")
 
 # Vertical 9:16 — TikTok/Reels/Shorts
 W, H = 1080, 1920
@@ -100,7 +152,7 @@ def decode_text(text, duration):
 
     return VideoClip(frame_func, duration=duration).with_position("center")
 
-
+    
 def build(image_path, out_path=None, headline="THE SIGNAL IS LIVE", duration=12.0):
     """Render the full stack to a vertical MP4. Returns the output path."""
     if out_path is None:
@@ -128,7 +180,21 @@ def build(image_path, out_path=None, headline="THE SIGNAL IS LIVE", duration=12.
 
 
 if __name__ == "__main__":
-    image = sys.argv[1] if len(sys.argv) > 1 else "ai_image.png"
-    headline = sys.argv[2] if len(sys.argv) > 2 else "THE SIGNAL IS LIVE"
-    out = sys.argv[3] if len(sys.argv) > 3 else None
+    if "--prompt" in sys.argv:
+        # NEW "FREE-STACK" WAY: python video_factory.py --prompt "Your Idea" "Headline"
+        idx = sys.argv.index("--prompt")
+        prompt = sys.argv[idx + 1]
+        headline = sys.argv[idx + 2] if len(sys.argv) > idx + 2 else "THE SIGNAL IS LIVE"
+        image = generate_free_image(prompt)
+        out = sys.argv[idx + 3] if len(sys.argv) > idx + 3 and sys.argv[idx + 3].endswith(".mp4") else None
+    elif len(sys.argv) > 1:
+        # Old way: python video_factory.py image.png "Headline"
+        image = sys.argv[1]
+        headline = sys.argv[2] if len(sys.argv) > 2 else "THE SIGNAL IS LIVE"
+        out = sys.argv[3] if len(sys.argv) > 3 and sys.argv[3].endswith(".mp4") else None
+    else:
+        print("Usage: python video_factory.py image_path [headline]")
+        print("       OR: python video_factory.py --prompt 'Your AI Idea' 'Headline'")
+        sys.exit(1)
+        
     print(build(image, out, headline))
