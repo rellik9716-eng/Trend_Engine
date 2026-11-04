@@ -2,7 +2,11 @@
   "agency_name": "Havenwright",
   "product": "AI-Powered B2B SaaS Outreach System",
   "target_niche": "B2B SaaS",
-  "pain_points": ["High CAC", "Manual Outreach", "Slow Sales Cycles"],
+  "pain_points": [
+    "High CAC",
+    "Manual Outreach",
+    "Slow Sales Cycles"
+  ],
   "search_keywords": [
     "AI sales automation",
     "B2B SaaS outreach",
@@ -14,7 +18,15 @@
   "max_results": 10,
   "scoring": {
     "threshold": 6,
-    "power_words": ["AI", "AUTOMATION", "VIRAL", "TREND", "BREAKTHROUGH", "ROAS", "CAC"]
+    "power_words": [
+      "AI",
+      "AUTOMATION",
+      "VIRAL",
+      "TREND",
+      "BREAKTHROUGH",
+      "ROAS",
+      "CAC"
+    ]
   },
   "platforms": {
     "youtube": {
@@ -35,5 +47,10 @@
       "enabled": true,
       "api_key": ""
     }
-  }
+  },
+  "subreddits": [
+    "r/SaaS",
+    "r/Entrepreneur",
+    "r/Sales"
+  ]
 }

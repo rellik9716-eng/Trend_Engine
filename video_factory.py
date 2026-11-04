@@ -386,8 +386,8 @@ def _logo_frame(t, duration, mc, brand, url, logo_img):
     if y0 >= 0 and y0 + card.height <= H and x0c >= 0:
         a = card_rgba[:, :, 3:4].astype(np.float32) / 255.0
         region = frame[y0:y0 + card.height, x0c:x0c + card.width]
-        frame[y0:y0 + card.height, x0c:x0c + card.width] = (
-            card_rgba[:, :, :3] * a + region * (1.0 - a)
+        frame[y0:y0 + card.height, x0c:x0c + card.width, :3] = (
+            card_rgba[:, :, :3] * a + region[:, :, :3] * (1.0 - a)
         ).astype(np.uint8)
     return frame
 
@@ -470,11 +470,11 @@ def build(image_path=None, video_path=None, out_path=None, headline="THE SIGNAL 
     # 'Fame' signature end: decoded logo + client URL over the last 1s
     layers.append(_signature_end_card(duration, mood_color(mood)))
 
-    final = CompositeVideoClip(layers, size=(W, H), use_bgclip=True).with_duration(duration)
+    stacked = CompositeVideoClip(layers, size=(W, H), use_bgclip=True).with_duration(duration)
 
     # Pattern interrupt: glitch only on the first second
     def interrupt(t):
-        img = final.get_frame(t)
+        img = stacked.get_frame(t)
         if t < 1.0:
             rng = np.random.default_rng(int(t * 1000))
             h = img.shape[0]

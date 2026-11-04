@@ -85,7 +85,8 @@ with st.sidebar:
     if imgs:
         fallback_image = os.path.join(AI_IMAGES, st.selectbox("Pick a render", imgs))
     else:
-        fallback_image = st.file_uploader("Upload fallback", type=["png", "jpg", "jpeg"]).name
+        _up = st.file_uploader("Upload fallback", type=["png", "jpg", "jpeg"])
+        fallback_image = _up.name if _up else None
 
     st.divider()
     _hunt_clicked = st.button("🎯 HUNT FOR WINNING GAPS", use_container_width=True, type="primary")

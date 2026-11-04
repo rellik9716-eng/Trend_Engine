@@ -53,13 +53,13 @@ def load_config():
     return {}
 
 
-def fetch_reddit(subreddit, limit=100):
-    """Latest posts from a subreddit via the public .json endpoint (no auth)."""
-    url = f"https://www.reddit.com/r/{subreddit}/hot.json?limit={limit}&raw_json=1"
-    r = requests.get(url, headers={"User-Agent": "niche-hunter/1.0"}, timeout=20)
-    r.raise_for_status()
+_UA = "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/124.0.0.0 Safari/537.36"
+_JINA_KEY = "Bearer jina_94ad9e4607e3494893fb836d215a9974eamaJQfvaxYUP2ZglTI3HduDYy9o"
+
+
+def _parse_posts(data):
     out = []
-    for c in r.json().get("data", {}).get("children", []):
+    for c in data.get("data", {}).get("children", []):
         d = c.get("data", {})
         out.append({
             "title": d.get("title", ""),
@@ -68,6 +68,36 @@ def fetch_reddit(subreddit, limit=100):
             "comments": d.get("num_comments", 0),
         })
     return out
+
+
+def fetch_reddit(subreddit, limit=100):
+    """Latest posts from a subreddit via a fallback chain (home IP is blocked by Reddit)."""
+    sub = subreddit[2:] if subreddit.startswith('r/') else subreddit
+    attempts = [
+        ("codetabs proxy", f"https://api.codetabs.com/v1/proxy?quest=https://www.reddit.com/r/{sub}/hot.json?limit={limit}", {"User-Agent": _UA}),
+        ("jina.ai", f"https://r.jina.ai/https://www.reddit.com/r/{sub}/hot.json?limit={limit}", {"Authorization": _JINA_KEY, "User-Agent": _UA}),
+        ("old.reddit.com direct", f"https://old.reddit.com/r/{sub}/hot.json?limit={limit}", {"User-Agent": _UA}),
+        ("allorigins /raw/", "https://api.allorigins.win/raw?url=" + requests.utils.quote(f"https://www.reddit.com/r/{sub}/hot.json?limit={limit}", safe=""), {"User-Agent": _UA}),
+    ]
+    for name, url, headers in attempts:
+        try:
+            r = requests.get(url, headers=headers, timeout=30)
+            r.raise_for_status()
+            try:
+                data = r.json()
+            except ValueError:
+                # Jina may wrap the JSON in readable text — slice the first..last brace.
+                s, e = r.text.find("{"), r.text.rfind("}")
+                if s == -1 or e <= s:
+                    raise
+                data = json.loads(r.text[s:e + 1])
+            posts = _parse_posts(data)
+            if posts:
+                return posts
+            print(f"[{sub}] {name}: 200 but no posts, trying next")
+        except Exception as e:
+            print(f"[{sub}] {name} failed: {e}")
+    return []
 
 
 def _count_hits(text, phrases):
